@@ -1,4 +1,7 @@
+import time
+
 import pandas as pd
+from tqdm import tqdm_notebook, tqdm
 
 from db_process import DBProcess
 
@@ -13,7 +16,8 @@ class Excel:
         with db_processor.get_connection() as connection:
             df = self.df.loc[condition]
             df = df.rename(columns={"1/2": "am_pm"})
-            for row in df.itertuples():
+            for row in tqdm(df.itertuples(), total = df.shape[0], desc="Обработка"):
+                plan_value = row.plan
                 date = row.p_date
                 shift_tag = row.am_pm
                 shift = row.shift
@@ -27,7 +31,7 @@ class Excel:
                 else:
                     width = "1200"
                 stop_time = row.stop_time if pd.notna(row.stop_time) else 0
-                work_time = row.work_time   if pd.notna(row.work_time) else 0
+                work_time = row.work_time if pd.notna(row.work_time) else 0
                 total = row.forming
                 valid = row.good_quality
                 tech_sheet = row.tech_sheet
@@ -68,10 +72,13 @@ class Excel:
                     (cut_reject, 9),
                     (dry_laboratory, 10)
                 ]
+                if plan_value > 0:
+                    db_processor.create_plan_record(date, board_id, plan_value)
+                else:
+                    production_log_id = db_processor.create_production_log_record(date, stop_time, work_time, shift, shift_tag)
 
-                production_log_id = db_processor.create_production_log_record(date, stop_time, work_time, shift, shift_tag)
-
-                for data, category_id in data_to_insert:
-                    if pd.notna(data):
-                        db_processor.insert_into_board_production(production_log_id, board_id, category_id, data)
+                    for data, category_id in data_to_insert:
+                        if pd.notna(data):
+                            db_processor.insert_into_board_production(production_log_id, board_id, category_id, data)
+                time.sleep(0.001)
 

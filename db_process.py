@@ -1,6 +1,5 @@
 from datetime import timedelta
 import warnings
-import mysql.connector
 from mysql.connector import pooling, IntegrityError
 
 import pandas as pd
@@ -66,7 +65,7 @@ class DBProcess:
         production_finish_str = production_finish.strftime("%Y-%m-%d %H:%M:%S") if production_finish else None
         shift_id = self.get_shift_id(shift)
         product_types_id = 1
-        print(production_start, production_finish, shift_id, product_types_id)
+        # print(production_start, production_finish, shift_id, product_types_id)
 
         try:
             with self.get_connection() as connection:
@@ -79,7 +78,7 @@ class DBProcess:
                 connection.commit()
                 production_log_id = new_id
         except IntegrityError as e:
-        # Handle duplicate entry
+            # Handle duplicate entry
             production_log_id = None
             with self.get_connection() as connection:
                 cursor = connection.cursor()
@@ -91,7 +90,7 @@ class DBProcess:
                 if existing_id:
                     production_log_id = existing_id[0]
         finally:
-        # Ensure proper cleanup
+            # Ensure proper cleanup
             if cursor:
                 cursor.close()
 
@@ -137,7 +136,23 @@ class DBProcess:
                 connection.commit()
         except IntegrityError as e:
             if e.errno == 1062:
-                print("Duplicate entry")
+                pass
+                # print("Duplicate entry")
+            else:
+                e.msg = "Ошибка работы с БД"
+                raise e
+
+    def create_plan_record(self, plan_date, gypsum_board_id, value):
+        try:
+            with self.get_connection() as connection:
+                cursor = connection.cursor()
+                query = "INSERT INTO plan (plan_date, gypsum_board_id, value) VALUES (%s, %s, %s);"
+                cursor.execute(query, (plan_date, gypsum_board_id, value))
+                connection.commit()
+        except IntegrityError as e:
+            if e.errno == 1062:
+                pass
+                # print("Duplicate plan entry")
             else:
                 e.msg = "Ошибка работы с БД"
                 raise e
