@@ -6,15 +6,15 @@ from excel_process import Excel
 
 def main():
     connection = mysql.connector.connect(
-        host="localhost",
+        host="127.0.0.1",
         user="root",
         password="402986",
         database="goldengroup",
-        port=3306)
+        port=33006)
     db_process = DBProcess(connection)
     df = db_process.get_gypsum_board()
     print(df.head())
-    path: str = r"F:\YandexDisk-ar.maclashev\Обучение Python\ДИПЛОМ\Начальные данные\выпуск.xlsx"
+    path: str = r"/home/artem-maklashev/Yandex.Disk/Обучение Python/ДИПЛОМ/Начальные данные/выпуск.xlsx"
     print(path)
     excel_processor = Excel(path)
     excel_data = excel_processor.df

@@ -13,7 +13,7 @@ class DBProcess:
         user="root",
         password="402986",
         database="goldengroup",
-        port=3306
+        port=33006
     )
 
     def get_connection(self):
