@@ -17,6 +17,16 @@ class DBProcess:
     )
     def clearDB(self):
         cursor = self.connection.cursor()
+        query = "DELETE FROM plan ;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        query = "DELETE FROM board_production ;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        query = "DELETE FROM productionlog ;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+
         query = "ALTER TABLE plan AUTO_INCREMENT=1;"
         # Выполнение SQL-запросов
         cursor.execute(query)
@@ -68,7 +78,6 @@ class DBProcess:
         return df
 
     def create_production_log_record(self, p_date, stop_time, work_time, shift, shift_tag):
-
         if shift_tag == 1:
             production_start = p_date + timedelta(hours=8)
         elif shift_tag == 2:
@@ -77,6 +86,7 @@ class DBProcess:
                             timedelta(minutes=(work_time - stop_time))
         production_start_str = production_start.strftime("%Y-%m-%d %H:%M:%S") if production_start else None
         production_finish_str = production_finish.strftime("%Y-%m-%d %H:%M:%S") if production_finish else None
+        p_date_str = (p_date + timedelta(hours=0)).strftime("%Y-%m-%d") if p_date else None
         shift_id = self.get_shift_id(shift)
         product_types_id = 1
         # print(production_start, production_finish, shift_id, product_types_id)
@@ -84,11 +94,13 @@ class DBProcess:
         try:
             with self.get_connection() as connection:
                 cursor = connection.cursor()
-                query = ("INSERT INTO productionlog (production_start, production_finish, shift_id, product_types_id, production_date) "
+                query = ("INSERT INTO productionlog (production_start, production_finish, shift_id, product_types_id,"
+                         " production_date) "
                          "VALUES (%s, %s, %s, %s, %s)")
-                # print("Попытка вставить данные:",production_start_str, production_finish_str, shift_id, product_types_id)
+                # print("Попытка вставить данные:",production_start_str, production_finish_str,
+                # shift_id, product_types_id)
                 cursor.execute(
-                    query, (production_start_str, production_finish_str, shift_id, product_types_id, p_date))
+                    query, (production_start_str, production_finish_str, shift_id, product_types_id, p_date_str))
                 new_id = cursor.lastrowid
                 connection.commit()
                 production_log_id = new_id
