@@ -15,6 +15,20 @@ class DBProcess:
         database="goldengroup",
         port=3306
     )
+    def clearDB(self):
+        cursor = self.connection.cursor()
+        query = "DELETE FROM plan;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        query = "DELETE FROM board_production;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        query = "DELETE FROM productionlog;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        self.connection.commit()
+        cursor.close()
+
 
     def get_connection(self):
         return DBProcess.connection_pool.get_connection()
@@ -72,6 +86,7 @@ class DBProcess:
                 cursor = connection.cursor()
                 query = ("INSERT INTO productionlog (production_start, production_finish, shift_id, product_types_id) "
                          "VALUES (%s, %s, %s, %s)")
+                # print("Попытка вставить данные:",production_start_str, production_finish_str, shift_id, product_types_id)
                 cursor.execute(
                     query, (production_start_str, production_finish_str, shift_id, product_types_id))
                 new_id = cursor.lastrowid
