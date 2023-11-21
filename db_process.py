@@ -17,13 +17,13 @@ class DBProcess:
     )
     def clearDB(self):
         cursor = self.connection.cursor()
-        query = "DELETE FROM plan;"
+        query = "ALTER TABLE plan AUTO_INCREMENT=1;"
         # Выполнение SQL-запросов
         cursor.execute(query)
-        query = "DELETE FROM board_production;"
+        query = "ALTER TABLE board_production AUTO_INCREMENT=1;"
         # Выполнение SQL-запросов
         cursor.execute(query)
-        query = "DELETE FROM productionlog;"
+        query = "ALTER TABLE productionlog AUTO_INCREMENT=1;"
         # Выполнение SQL-запросов
         cursor.execute(query)
         self.connection.commit()
@@ -84,11 +84,11 @@ class DBProcess:
         try:
             with self.get_connection() as connection:
                 cursor = connection.cursor()
-                query = ("INSERT INTO productionlog (production_start, production_finish, shift_id, product_types_id) "
-                         "VALUES (%s, %s, %s, %s)")
+                query = ("INSERT INTO productionlog (production_start, production_finish, shift_id, product_types_id, production_date) "
+                         "VALUES (%s, %s, %s, %s, %s)")
                 # print("Попытка вставить данные:",production_start_str, production_finish_str, shift_id, product_types_id)
                 cursor.execute(
-                    query, (production_start_str, production_finish_str, shift_id, product_types_id))
+                    query, (production_start_str, production_finish_str, shift_id, product_types_id, p_date))
                 new_id = cursor.lastrowid
                 connection.commit()
                 production_log_id = new_id
