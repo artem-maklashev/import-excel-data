@@ -183,3 +183,51 @@ class DBProcess:
             else:
                 e.msg = "Ошибка работы с БД"
                 raise e
+
+    def get_unit_part_id(self, division, production_area, unit, unit_part):
+        df = self.get_delays()
+        result_series = df.loc[
+            (df["division"] == division) &
+            (df["production_area"] == production_area) &
+            (df["unit"] == unit) &
+            (unit_part == (df["unit_part"] if pd.notna(df["unit_part"]) else " ")),
+            "id"
+        ]
+        if result_series.empty:
+            del df
+            return "Not found"
+        id_value = int(result_series.iloc[0])
+        del df
+        return id_value
+
+    def get_delays(self):
+        with self.get_connection():
+            query = """SELECT 
+                        d.name as division,
+                        pa.name AS production_area,
+                        u.name AS unit,
+                        up.name AS unit_part
+                    FROM unit_part up 
+                    JOIN unit u ON up.unit_id = u.id 
+                    JOIN production_area pa ON u.production_area_id = pa.id
+                    JOIN division d ON d.id = pa.division_id;"""
+            warnings.filterwarnings("ignore")
+            df = pd.read_sql(query, self.connection)
+        return df
+
+    def create_delays_record(self, date, start_time, end_time, shift_id, unit_part_id, gypsum_board_id):
+        try:
+            with self.get_connection() as connection:
+                cursor = connection.cursor()
+                query = ("INSERT INTO dalays (dalay_date, start_time, end_time, unit_part_id, shift_id,"
+                         " gypsum_board_id) "
+                         "VALUES (%s, %s, %s, %s, %s, %s);")
+                cursor.execute(query, (date, start_time, end_time, unit_part_id, shift_id, gypsum_board_id))
+                connection.commit()
+        except IntegrityError as e:
+            if e.errno == 1062:
+                pass
+                # print("Duplicate plan entry")
+            else:
+                e.msg = "Ошибка работы с БД"
+                raise e
