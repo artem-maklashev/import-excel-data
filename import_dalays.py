@@ -1,6 +1,7 @@
 import mysql.connector
 
 from db_process import DBProcess
+from excel_delays import ExcelDelays
 
 
 def main():
@@ -11,6 +12,9 @@ def main():
         database="goldengroup",
         port=3306)
     db_process = DBProcess(connection)
+    path: str = r"D:\YandexDisk\Обучение Python\ДИПЛОМ\Начальные данные\простои.xlsx"
+    excel_processor = ExcelDelays(path)
+    excel_processor.import_delays_data(db_process)
 
 
 if __name__ == "__main__":

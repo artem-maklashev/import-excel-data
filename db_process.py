@@ -61,7 +61,7 @@ class DBProcess:
         with self.get_connection():
             query = """SELECT gb.id, 
                         tm.name AS trade_mark, 
-                        bt.name AS 'type',
+                        bt.name AS 'btype',
                         e.name AS edge,
                         l.value AS 'length',
                         t.value AS thickness,
@@ -134,22 +134,23 @@ class DBProcess:
             else:
                 return None
 
-    def get_gypsum_board_id(self, trade_mark, type, edge, thickness, length, width):
+    def get_gypsum_board_id(self, trade_mark, btype, edge, thickness, length, width):
         df = self.get_gypsum_board()
+        print(trade_mark, btype, edge, thickness, length, width)
         result_series = df.loc[
             (df["trade_mark"] == trade_mark) &
-            (df["type"] == type) &
+            (df["btype"] == btype) &
             (df["edge"] == edge) &
             (df["thickness"] == thickness) &
             (df["length"] == length) &
-            (df["width"] == width),
-            "id"
-        ]
+            (df["width"] == width),"id"]
+
         if result_series.empty:
             del df
             return "Not found"
         id_value = int(result_series.iloc[0])
         del df
+
         return id_value
 
     def insert_into_board_production(self, production_log_id, board_id, gboard_category, value):
@@ -186,43 +187,59 @@ class DBProcess:
 
     def get_unit_part_id(self, division, production_area, unit, unit_part):
         df = self.get_delays()
-        result_series = df.loc[
-            (df["division"] == division) &
-            (df["production_area"] == production_area) &
-            (df["unit"] == unit) &
-            (unit_part == (df["unit_part"] if pd.notna(df["unit_part"]) else " ")),
-            "id"
-        ]
+        print(df.loc[df["id"] == 55])
+        print(division, production_area, unit, unit_part)
+        if unit_part == " ":
+            condition = (
+                    (df["division"] == division) &
+                    (df["production_area"] == production_area) &
+                    (df["unit"] == unit) &
+                    (df["unit_part"] == "-")
+            )
+        else:
+            condition = (
+                    (df["division"] == division) &
+                    (df["production_area"] == production_area) &
+                    (df["unit"] == unit) &
+                    (df["unit_part"] == unit_part)
+            )
+
+        result_series = df.loc[condition, "id"]
+
         if result_series.empty:
             del df
             return "Not found"
+
         id_value = int(result_series.iloc[0])
         del df
+        print(id_value)
         return id_value
 
     def get_delays(self):
         with self.get_connection():
             query = """SELECT 
-                        d.name as division,
+                        up.id, 
+                        d.id as division,
                         pa.name AS production_area,
                         u.name AS unit,
                         up.name AS unit_part
                     FROM unit_part up 
-                    JOIN unit u ON up.unit_id = u.id 
-                    JOIN production_area pa ON u.production_area_id = pa.id
-                    JOIN division d ON d.id = pa.division_id;"""
+                        JOIN unit u ON up.unit_id = u.id 
+                        JOIN production_area pa ON u.production_area_id = pa.id
+                        JOIN division d ON d.id = pa.division_id;"""
             warnings.filterwarnings("ignore")
             df = pd.read_sql(query, self.connection)
         return df
 
-    def create_delays_record(self, date, start_time, end_time, shift_id, unit_part_id, gypsum_board_id):
+    def create_delays_record(self, daley_type_id, date, start_time, end_time, shift_id, unit_part_id, gypsum_board_id):
         try:
             with self.get_connection() as connection:
                 cursor = connection.cursor()
-                query = ("INSERT INTO dalays (dalay_date, start_time, end_time, unit_part_id, shift_id,"
+                query = ("INSERT INTO dalays (daley_type_id, dalay_date, start_time, end_time, unit_part_id, shift_id,"
                          " gypsum_board_id) "
-                         "VALUES (%s, %s, %s, %s, %s, %s);")
-                cursor.execute(query, (date, start_time, end_time, unit_part_id, shift_id, gypsum_board_id))
+                         "VALUES (%s, %s, %s, %s, %s, %s, %s);")
+                cursor.execute(query, (daley_type_id, date, start_time, end_time, unit_part_id, shift_id,
+                                       gypsum_board_id))
                 connection.commit()
         except IntegrityError as e:
             if e.errno == 1062:
@@ -231,3 +248,14 @@ class DBProcess:
             else:
                 e.msg = "Ошибка работы с БД"
                 raise e
+
+    def get_daley_type_id(self, delay_type):
+        with self.get_connection() as connection:
+            query = "SELECT id FROM delay_type WHERE name = %s"
+            cursor = connection.cursor()
+            cursor.execute(query, (delay_type,))
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                return None

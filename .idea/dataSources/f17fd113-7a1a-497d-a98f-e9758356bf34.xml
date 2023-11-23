@@ -1014,8 +1014,8 @@ sys|schema||mysql.sys|localhost|TRIGGER|G</Grants>
     </schema>
     <schema id="294" parent="1" name="goldengroup">
       <Current>1</Current>
-      <IntrospectionTimestamp>2023-11-23.20:20:37</IntrospectionTimestamp>
-      <LocalIntrospectionTimestamp>2023-11-23.12:20:37</LocalIntrospectionTimestamp>
+      <IntrospectionTimestamp>2023-11-23.20:56:28</IntrospectionTimestamp>
+      <LocalIntrospectionTimestamp>2023-11-23.12:56:28</LocalIntrospectionTimestamp>
       <CollationName>utf8mb4_0900_ai_ci</CollationName>
     </schema>
     <schema id="295" parent="1" name="lesson_4">
@@ -1275,621 +1275,634 @@ gboard_category_id</ColNames>
       <DasType>int|0s</DasType>
       <Position>7</Position>
     </column>
-    <foreign-key id="354" parent="305" name="dalays_unit_part_FK">
+    <column id="354" parent="305" name="daley_type_id">
+      <DasType>int|0s</DasType>
+      <Position>8</Position>
+    </column>
+    <foreign-key id="355" parent="305" name="dalays_unit_part_FK">
       <ColNames>unit_part_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>unit_part</RefTableName>
     </foreign-key>
-    <foreign-key id="355" parent="305" name="dalays_FK">
+    <foreign-key id="356" parent="305" name="dalays_FK">
       <ColNames>shift_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>shift</RefTableName>
     </foreign-key>
-    <foreign-key id="356" parent="305" name="dalays_FK_1">
+    <foreign-key id="357" parent="305" name="dalays_FK_1">
       <ColNames>gypsum_board_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>gypsum_board</RefTableName>
     </foreign-key>
-    <index id="357" parent="305" name="PRIMARY">
+    <foreign-key id="358" parent="305" name="dalays_FK_2">
+      <ColNames>daley_type_id</ColNames>
+      <RefColNames>id</RefColNames>
+      <RefTableName>delay_type</RefTableName>
+    </foreign-key>
+    <index id="359" parent="305" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="358" parent="305" name="unit_part_FK_idx">
+    <index id="360" parent="305" name="unit_part_FK_idx">
       <ColNames>unit_part_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="359" parent="305" name="dalays_FK">
+    <index id="361" parent="305" name="dalays_FK">
       <ColNames>shift_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="360" parent="305" name="dalays_FK_1">
+    <index id="362" parent="305" name="dalays_FK_1">
       <ColNames>gypsum_board_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="361" parent="305" name="PRIMARY">
+    <index id="363" parent="305" name="dalays_FK_2">
+      <ColNames>daley_type_id</ColNames>
+      <Type>btree</Type>
+    </index>
+    <key id="364" parent="305" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="362" parent="306" name="id">
+    <column id="365" parent="306" name="id">
       <AutoIncrement>4</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="363" parent="306" name="name">
+    <column id="366" parent="306" name="name">
       <DasType>varchar(45)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <index id="364" parent="306" name="PRIMARY">
+    <index id="367" parent="306" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="365" parent="306" name="PRIMARY">
+    <key id="368" parent="306" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="366" parent="307" name="id">
+    <column id="369" parent="307" name="id">
       <AutoIncrement>3</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="367" parent="307" name="name">
+    <column id="370" parent="307" name="name">
       <DasType>varchar(45)|0s</DasType>
       <Position>2</Position>
     </column>
-    <index id="368" parent="307" name="PRIMARY">
+    <index id="371" parent="307" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="369" parent="307" name="PRIMARY">
+    <key id="372" parent="307" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="370" parent="308" name="id">
+    <column id="373" parent="308" name="id">
       <AutoIncrement>4</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="371" parent="308" name="name">
+    <column id="374" parent="308" name="name">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <index id="372" parent="308" name="PRIMARY">
+    <index id="375" parent="308" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="373" parent="308" name="PRIMARY">
+    <key id="376" parent="308" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="374" parent="309" name="id">
+    <column id="377" parent="309" name="id">
       <AutoIncrement>11</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="375" parent="309" name="title">
+    <column id="378" parent="309" name="title">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <index id="376" parent="309" name="PRIMARY">
+    <index id="379" parent="309" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="377" parent="309" name="title">
+    <index id="380" parent="309" name="title">
       <ColNames>title</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="378" parent="309" name="PRIMARY">
+    <key id="381" parent="309" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <key id="379" parent="309" name="title">
+    <key id="382" parent="309" name="title">
       <UnderlyingIndexName>title</UnderlyingIndexName>
     </key>
-    <column id="380" parent="310" name="id">
+    <column id="383" parent="310" name="id">
       <AutoIncrement>46</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="381" parent="310" name="trade_mark_id">
+    <column id="384" parent="310" name="trade_mark_id">
       <DasType>bigint unsigned|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="382" parent="310" name="board_types_id">
+    <column id="385" parent="310" name="board_types_id">
       <DasType>int|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="383" parent="310" name="edge_id">
+    <column id="386" parent="310" name="edge_id">
       <DasType>int|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="384" parent="310" name="thickness_id">
+    <column id="387" parent="310" name="thickness_id">
       <DasType>int|0s</DasType>
       <Position>5</Position>
     </column>
-    <column id="385" parent="310" name="width_id">
+    <column id="388" parent="310" name="width_id">
       <DasType>int|0s</DasType>
       <Position>6</Position>
     </column>
-    <column id="386" parent="310" name="length_id">
+    <column id="389" parent="310" name="length_id">
       <DasType>int|0s</DasType>
       <Position>7</Position>
     </column>
-    <column id="387" parent="310" name="types_id">
+    <column id="390" parent="310" name="types_id">
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>8</Position>
     </column>
-    <column id="388" parent="310" name="board_type_id">
+    <column id="391" parent="310" name="board_type_id">
       <DasType>int|0s</DasType>
       <Position>9</Position>
     </column>
-    <foreign-key id="389" parent="310" name="gypsum_board_FK_1">
+    <foreign-key id="392" parent="310" name="gypsum_board_FK_1">
       <ColNames>trade_mark_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>trade_mark</RefTableName>
     </foreign-key>
-    <foreign-key id="390" parent="310" name="gypsum_board_FK_3">
+    <foreign-key id="393" parent="310" name="gypsum_board_FK_3">
       <ColNames>board_types_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>board_types</RefTableName>
     </foreign-key>
-    <foreign-key id="391" parent="310" name="types_id_fk">
+    <foreign-key id="394" parent="310" name="types_id_fk">
       <ColNames>board_types_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>board_types</RefTableName>
     </foreign-key>
-    <foreign-key id="392" parent="310" name="edge_id_fk">
+    <foreign-key id="395" parent="310" name="edge_id_fk">
       <ColNames>edge_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>edge</RefTableName>
     </foreign-key>
-    <foreign-key id="393" parent="310" name="thickness_id_fk">
+    <foreign-key id="396" parent="310" name="thickness_id_fk">
       <ColNames>thickness_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>thickness</RefTableName>
     </foreign-key>
-    <foreign-key id="394" parent="310" name="width_id_fk">
+    <foreign-key id="397" parent="310" name="width_id_fk">
       <ColNames>width_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>width</RefTableName>
     </foreign-key>
-    <foreign-key id="395" parent="310" name="length_id_fk">
+    <foreign-key id="398" parent="310" name="length_id_fk">
       <ColNames>length_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>length</RefTableName>
     </foreign-key>
-    <foreign-key id="396" parent="310" name="gypsum_board_FK">
+    <foreign-key id="399" parent="310" name="gypsum_board_FK">
       <ColNames>types_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>product_types</RefTableName>
     </foreign-key>
-    <foreign-key id="397" parent="310" name="FKvr4tf434jox4swjq6s2cry6b">
+    <foreign-key id="400" parent="310" name="FKvr4tf434jox4swjq6s2cry6b">
       <ColNames>board_type_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>board_types</RefTableName>
     </foreign-key>
-    <index id="398" parent="310" name="PRIMARY">
+    <index id="401" parent="310" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="399" parent="310" name="trade_mark_id_fk">
+    <index id="402" parent="310" name="trade_mark_id_fk">
       <ColNames>trade_mark_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="400" parent="310" name="types_id_fk">
+    <index id="403" parent="310" name="types_id_fk">
       <ColNames>board_types_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="401" parent="310" name="edge_id_fk">
+    <index id="404" parent="310" name="edge_id_fk">
       <ColNames>edge_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="402" parent="310" name="thickness_id_fk">
+    <index id="405" parent="310" name="thickness_id_fk">
       <ColNames>thickness_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="403" parent="310" name="width_id_fk">
+    <index id="406" parent="310" name="width_id_fk">
       <ColNames>width_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="404" parent="310" name="length_id_fk">
+    <index id="407" parent="310" name="length_id_fk">
       <ColNames>length_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="405" parent="310" name="gypsum_board_FK">
+    <index id="408" parent="310" name="gypsum_board_FK">
       <ColNames>types_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="406" parent="310" name="FKvr4tf434jox4swjq6s2cry6b">
+    <index id="409" parent="310" name="FKvr4tf434jox4swjq6s2cry6b">
       <ColNames>board_type_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="407" parent="310" name="PRIMARY">
+    <key id="410" parent="310" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="408" parent="311" name="id">
+    <column id="411" parent="311" name="id">
       <AutoIncrement>16</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="409" parent="311" name="value">
+    <column id="412" parent="311" name="value">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <index id="410" parent="311" name="PRIMARY">
+    <index id="413" parent="311" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="411" parent="311" name="PRIMARY">
+    <key id="414" parent="311" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="412" parent="312" name="id">
+    <column id="415" parent="312" name="id">
       <AutoIncrement>1112</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="413" parent="312" name="plan_date">
+    <column id="416" parent="312" name="plan_date">
       <DasType>date|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="414" parent="312" name="gypsum_board_id">
+    <column id="417" parent="312" name="gypsum_board_id">
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <column id="415" parent="312" name="value">
+    <column id="418" parent="312" name="value">
       <DasType>float|0s</DasType>
       <Position>4</Position>
     </column>
-    <foreign-key id="416" parent="312" name="gypsum_board">
+    <foreign-key id="419" parent="312" name="gypsum_board">
       <ColNames>gypsum_board_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>gypsum_board</RefTableName>
     </foreign-key>
-    <index id="417" parent="312" name="PRIMARY">
+    <index id="420" parent="312" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="418" parent="312" name="plan_combination">
+    <index id="421" parent="312" name="plan_combination">
       <ColNames>plan_date
 gypsum_board_id
 value</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="419" parent="312" name="plan_unique">
+    <index id="422" parent="312" name="plan_unique">
       <ColNames>plan_date
 gypsum_board_id
 value</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="420" parent="312" name="gypsum_board_id">
+    <index id="423" parent="312" name="gypsum_board_id">
       <ColNames>gypsum_board_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="421" parent="312" name="PRIMARY">
+    <key id="424" parent="312" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <key id="422" parent="312" name="plan_combination">
+    <key id="425" parent="312" name="plan_combination">
       <UnderlyingIndexName>plan_combination</UnderlyingIndexName>
     </key>
-    <key id="423" parent="312" name="plan_unique">
+    <key id="426" parent="312" name="plan_unique">
       <UnderlyingIndexName>plan_unique</UnderlyingIndexName>
     </key>
-    <column id="424" parent="313" name="product_type">
+    <column id="427" parent="313" name="product_type">
       <DasType>varchar(31)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="425" parent="313" name="id">
+    <column id="428" parent="313" name="id">
       <AutoIncrement>1</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="426" parent="313" name="trade_mark_id">
+    <column id="429" parent="313" name="trade_mark_id">
       <DasType>bigint|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="427" parent="313" name="types_id">
+    <column id="430" parent="313" name="types_id">
       <DasType>int|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="428" parent="313" name="board_type_id">
+    <column id="431" parent="313" name="board_type_id">
       <DasType>int|0s</DasType>
       <Position>5</Position>
     </column>
-    <column id="429" parent="313" name="edge_id">
+    <column id="432" parent="313" name="edge_id">
       <DasType>int|0s</DasType>
       <Position>6</Position>
     </column>
-    <column id="430" parent="313" name="length_id">
+    <column id="433" parent="313" name="length_id">
       <DasType>int|0s</DasType>
       <Position>7</Position>
     </column>
-    <column id="431" parent="313" name="thickness_id">
+    <column id="434" parent="313" name="thickness_id">
       <DasType>int|0s</DasType>
       <Position>8</Position>
     </column>
-    <column id="432" parent="313" name="width_id">
+    <column id="435" parent="313" name="width_id">
       <DasType>int|0s</DasType>
       <Position>9</Position>
     </column>
-    <foreign-key id="433" parent="313" name="FKpug0eosrpve9kp2mwqa0f7pfx">
+    <foreign-key id="436" parent="313" name="FKpug0eosrpve9kp2mwqa0f7pfx">
       <ColNames>types_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>product_types</RefTableName>
     </foreign-key>
-    <foreign-key id="434" parent="313" name="FKcmts05rtbdu3y61gjq17jtst1">
+    <foreign-key id="437" parent="313" name="FKcmts05rtbdu3y61gjq17jtst1">
       <ColNames>board_type_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>board_types</RefTableName>
     </foreign-key>
-    <foreign-key id="435" parent="313" name="FKn3yodwh82spq83gb2ueuf65op">
+    <foreign-key id="438" parent="313" name="FKn3yodwh82spq83gb2ueuf65op">
       <ColNames>edge_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>edge</RefTableName>
     </foreign-key>
-    <foreign-key id="436" parent="313" name="FKlh5wceew7kqc2vb0y88jfvln9">
+    <foreign-key id="439" parent="313" name="FKlh5wceew7kqc2vb0y88jfvln9">
       <ColNames>length_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>length</RefTableName>
     </foreign-key>
-    <foreign-key id="437" parent="313" name="FKn9ubxo2cg60fxa8t6bbigyprm">
+    <foreign-key id="440" parent="313" name="FKn9ubxo2cg60fxa8t6bbigyprm">
       <ColNames>thickness_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>thickness</RefTableName>
     </foreign-key>
-    <foreign-key id="438" parent="313" name="FK27lt8b99d6a5xao0ig9hllyjg">
+    <foreign-key id="441" parent="313" name="FK27lt8b99d6a5xao0ig9hllyjg">
       <ColNames>width_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>width</RefTableName>
     </foreign-key>
-    <index id="439" parent="313" name="PRIMARY">
+    <index id="442" parent="313" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="440" parent="313" name="FKpug0eosrpve9kp2mwqa0f7pfx">
+    <index id="443" parent="313" name="FKpug0eosrpve9kp2mwqa0f7pfx">
       <ColNames>types_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="441" parent="313" name="FKcmts05rtbdu3y61gjq17jtst1">
+    <index id="444" parent="313" name="FKcmts05rtbdu3y61gjq17jtst1">
       <ColNames>board_type_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="442" parent="313" name="FKn3yodwh82spq83gb2ueuf65op">
+    <index id="445" parent="313" name="FKn3yodwh82spq83gb2ueuf65op">
       <ColNames>edge_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="443" parent="313" name="FKlh5wceew7kqc2vb0y88jfvln9">
+    <index id="446" parent="313" name="FKlh5wceew7kqc2vb0y88jfvln9">
       <ColNames>length_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="444" parent="313" name="FKn9ubxo2cg60fxa8t6bbigyprm">
+    <index id="447" parent="313" name="FKn9ubxo2cg60fxa8t6bbigyprm">
       <ColNames>thickness_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="445" parent="313" name="FK27lt8b99d6a5xao0ig9hllyjg">
+    <index id="448" parent="313" name="FK27lt8b99d6a5xao0ig9hllyjg">
       <ColNames>width_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="446" parent="313" name="PRIMARY">
+    <key id="449" parent="313" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="447" parent="314" name="id">
+    <column id="450" parent="314" name="id">
       <AutoIncrement>3</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="448" parent="314" name="name">
+    <column id="451" parent="314" name="name">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <index id="449" parent="314" name="PRIMARY">
+    <index id="452" parent="314" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="450" parent="314" name="PRIMARY">
+    <key id="453" parent="314" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="451" parent="315" name="p_date">
+    <column id="454" parent="315" name="p_date">
       <DasType>varchar(100)|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="452" parent="315" name="workshop_id">
+    <column id="455" parent="315" name="workshop_id">
       <DasType>double|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="453" parent="315" name="shift">
+    <column id="456" parent="315" name="shift">
       <DasType>varchar(100)|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="454" parent="315" name="12">
+    <column id="457" parent="315" name="12">
       <DasType>double|0s</DasType>
       <Position>4</Position>
     </column>
-    <column id="455" parent="315" name="trade_mark">
+    <column id="458" parent="315" name="trade_mark">
       <DasType>varchar(100)|0s</DasType>
       <Position>5</Position>
     </column>
-    <column id="456" parent="315" name="type">
+    <column id="459" parent="315" name="type">
       <DasType>varchar(100)|0s</DasType>
       <Position>6</Position>
     </column>
-    <column id="457" parent="315" name="length">
+    <column id="460" parent="315" name="length">
       <DasType>double|0s</DasType>
       <Position>7</Position>
     </column>
-    <column id="458" parent="315" name="thickness">
+    <column id="461" parent="315" name="thickness">
       <DasType>double|0s</DasType>
       <Position>8</Position>
     </column>
-    <column id="459" parent="315" name="plan">
+    <column id="462" parent="315" name="plan">
       <DasType>double|0s</DasType>
       <Position>9</Position>
     </column>
-    <column id="460" parent="315" name="stop_time">
+    <column id="463" parent="315" name="stop_time">
       <DasType>double|0s</DasType>
       <Position>10</Position>
     </column>
-    <column id="461" parent="315" name="work_time">
+    <column id="464" parent="315" name="work_time">
       <DasType>double|0s</DasType>
       <Position>11</Position>
     </column>
-    <column id="462" parent="315" name="forming">
+    <column id="465" parent="315" name="forming">
       <DasType>double|0s</DasType>
       <Position>12</Position>
     </column>
-    <column id="463" parent="315" name="wet_reject">
+    <column id="466" parent="315" name="wet_reject">
       <DasType>double|0s</DasType>
       <Position>13</Position>
     </column>
-    <column id="464" parent="315" name="laboratory_reject">
+    <column id="467" parent="315" name="laboratory_reject">
       <DasType>double|0s</DasType>
       <Position>14</Position>
     </column>
-    <column id="465" parent="315" name="cut_reject">
+    <column id="468" parent="315" name="cut_reject">
       <DasType>double|0s</DasType>
       <Position>15</Position>
     </column>
-    <column id="466" parent="315" name="dry_laboratory">
+    <column id="469" parent="315" name="dry_laboratory">
       <DasType>double|0s</DasType>
       <Position>16</Position>
     </column>
-    <column id="467" parent="315" name="good_quality">
+    <column id="470" parent="315" name="good_quality">
       <DasType>double|0s</DasType>
       <Position>17</Position>
     </column>
-    <column id="468" parent="315" name="category_2">
+    <column id="471" parent="315" name="category_2">
       <DasType>double|0s</DasType>
       <Position>18</Position>
     </column>
-    <column id="469" parent="315" name="category_a">
+    <column id="472" parent="315" name="category_a">
       <DasType>double|0s</DasType>
       <Position>19</Position>
     </column>
-    <column id="470" parent="315" name="tech_sheet">
+    <column id="473" parent="315" name="tech_sheet">
       <DasType>double|0s</DasType>
       <Position>20</Position>
     </column>
-    <column id="471" parent="315" name="uncertain_quality">
+    <column id="474" parent="315" name="uncertain_quality">
       <DasType>double|0s</DasType>
       <Position>21</Position>
     </column>
-    <column id="472" parent="316" name="id">
+    <column id="475" parent="316" name="id">
       <AutoIncrement>20</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="473" parent="316" name="name">
+    <column id="476" parent="316" name="name">
       <DasType>varchar(100)|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="474" parent="316" name="division_id">
+    <column id="477" parent="316" name="division_id">
       <DasType>int|0s</DasType>
       <Position>3</Position>
     </column>
-    <foreign-key id="475" parent="316" name="devision_FK">
+    <foreign-key id="478" parent="316" name="devision_FK">
       <ColNames>division_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>division</RefTableName>
     </foreign-key>
-    <index id="476" parent="316" name="PRIMARY">
+    <index id="479" parent="316" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="477" parent="316" name="devision_FK_idx">
+    <index id="480" parent="316" name="devision_FK_idx">
       <ColNames>division_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="478" parent="316" name="PRIMARY">
+    <key id="481" parent="316" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="479" parent="317" name="id">
+    <column id="482" parent="317" name="id">
       <AutoIncrement>1875</AutoIncrement>
       <DasType>bigint|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="480" parent="317" name="production_start">
+    <column id="483" parent="317" name="production_start">
       <DasType>datetime(6)|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="481" parent="317" name="production_finish">
+    <column id="484" parent="317" name="production_finish">
       <DasType>datetime(6)|0s</DasType>
       <Position>3</Position>
     </column>
-    <column id="482" parent="317" name="shift_id">
+    <column id="485" parent="317" name="shift_id">
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>4</Position>
     </column>
-    <column id="483" parent="317" name="product_types_id">
+    <column id="486" parent="317" name="product_types_id">
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>5</Position>
     </column>
-    <column id="484" parent="317" name="production_date">
+    <column id="487" parent="317" name="production_date">
       <DasType>datetime(6)|0s</DasType>
       <Position>6</Position>
     </column>
-    <foreign-key id="485" parent="317" name="fk_shift_id">
+    <foreign-key id="488" parent="317" name="fk_shift_id">
       <ColNames>shift_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>shift</RefTableName>
     </foreign-key>
-    <foreign-key id="486" parent="317" name="fk_product_types_id">
+    <foreign-key id="489" parent="317" name="fk_product_types_id">
       <ColNames>product_types_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>product_types</RefTableName>
     </foreign-key>
-    <index id="487" parent="317" name="PRIMARY">
+    <index id="490" parent="317" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="488" parent="317" name="production_start">
+    <index id="491" parent="317" name="production_start">
       <ColNames>production_start
 production_finish
 shift_id
@@ -1897,164 +1910,164 @@ product_types_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="489" parent="317" name="fk_shift_id">
+    <index id="492" parent="317" name="fk_shift_id">
       <ColNames>shift_id</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="490" parent="317" name="fk_product_types_id">
+    <index id="493" parent="317" name="fk_product_types_id">
       <ColNames>product_types_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="491" parent="317" name="PRIMARY">
+    <key id="494" parent="317" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <key id="492" parent="317" name="production_start">
+    <key id="495" parent="317" name="production_start">
       <UnderlyingIndexName>production_start</UnderlyingIndexName>
     </key>
-    <column id="493" parent="318" name="id">
+    <column id="496" parent="318" name="id">
       <AutoIncrement>5</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="494" parent="318" name="name">
+    <column id="497" parent="318" name="name">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <index id="495" parent="318" name="PRIMARY">
+    <index id="498" parent="318" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="496" parent="318" name="PRIMARY">
+    <key id="499" parent="318" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="497" parent="319" name="id">
+    <column id="500" parent="319" name="id">
       <AutoIncrement>17</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="498" parent="319" name="value">
+    <column id="501" parent="319" name="value">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <index id="499" parent="319" name="PRIMARY">
+    <index id="502" parent="319" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="500" parent="319" name="PRIMARY">
+    <key id="503" parent="319" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="501" parent="320" name="name">
+    <column id="504" parent="320" name="name">
       <DasType>varchar(255)|0s</DasType>
       <Position>1</Position>
     </column>
-    <column id="502" parent="320" name="description">
+    <column id="505" parent="320" name="description">
       <DasType>text|0s</DasType>
       <Position>2</Position>
     </column>
-    <column id="503" parent="320" name="id">
+    <column id="506" parent="320" name="id">
       <AutoIncrement>4</AutoIncrement>
       <DasType>bigint unsigned|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <index id="504" parent="320" name="PRIMARY">
+    <index id="507" parent="320" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="505" parent="320" name="PRIMARY">
+    <key id="508" parent="320" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="506" parent="321" name="id">
+    <column id="509" parent="321" name="id">
       <AutoIncrement>111</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="507" parent="321" name="name">
+    <column id="510" parent="321" name="name">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="508" parent="321" name="production_area_id">
+    <column id="511" parent="321" name="production_area_id">
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <foreign-key id="509" parent="321" name="unit_production_area_FK">
+    <foreign-key id="512" parent="321" name="unit_production_area_FK">
       <ColNames>production_area_id</ColNames>
       <RefColNames>id</RefColNames>
       <RefTableName>production_area</RefTableName>
     </foreign-key>
-    <index id="510" parent="321" name="PRIMARY">
+    <index id="513" parent="321" name="PRIMARY">
       <ColNames>id
 production_area_id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <index id="511" parent="321" name="production_area_FK_idx">
+    <index id="514" parent="321" name="production_area_FK_idx">
       <ColNames>production_area_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="512" parent="321" name="PRIMARY">
+    <key id="515" parent="321" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="513" parent="322" name="id">
+    <column id="516" parent="322" name="id">
       <AutoIncrement>1</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="514" parent="322" name="name">
+    <column id="517" parent="322" name="name">
       <DasType>varchar(100)|0s</DasType>
       <NotNull>1</NotNull>
       <Position>2</Position>
     </column>
-    <column id="515" parent="322" name="unit_id">
+    <column id="518" parent="322" name="unit_id">
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>3</Position>
     </column>
-    <index id="516" parent="322" name="PRIMARY">
+    <index id="519" parent="322" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="517" parent="322" name="PRIMARY">
+    <key id="520" parent="322" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>
     </key>
-    <column id="518" parent="323" name="id">
+    <column id="521" parent="323" name="id">
       <AutoIncrement>3</AutoIncrement>
       <DasType>int|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
     </column>
-    <column id="519" parent="323" name="value">
+    <column id="522" parent="323" name="value">
       <DasType>varchar(255)|0s</DasType>
       <Position>2</Position>
     </column>
-    <index id="520" parent="323" name="PRIMARY">
+    <index id="523" parent="323" name="PRIMARY">
       <ColNames>id</ColNames>
       <Type>btree</Type>
       <Unique>1</Unique>
     </index>
-    <key id="521" parent="323" name="PRIMARY">
+    <key id="524" parent="323" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <Primary>1</Primary>
       <UnderlyingIndexName>PRIMARY</UnderlyingIndexName>

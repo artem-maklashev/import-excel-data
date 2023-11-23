@@ -12,11 +12,11 @@ class ExcelDelays:
         self.df = pd.read_excel(path)
         self.errors_list = []
 
-    def import_production_data(self, condition, db_processor: DBProcess):
+    def import_delays_data(self, db_processor: DBProcess):
         with db_processor.get_connection() as connection:
-            df = self.df.loc[condition]
+            df = self.df
 
-            for row in tqdm(df.itertuples(), total = df.shape[0], desc="Обработка"):
+            for row in tqdm(df.itertuples(), total=df.shape[0], desc="Обработка"):
                 delay_type = row.delay_type
                 shift = row.shift
                 trade_mark = row.board_trade_mark
@@ -41,6 +41,7 @@ class ExcelDelays:
                 )
                 shift_id = db_processor.get_shift_id(shift)
                 unit_part_id = db_processor.get_unit_part_id(division, production_area, unit, unit_part)
+                delay_type_id = db_processor.get_daley_type_id(delay_type)
                 if board_id == "Not found":
                     self.errors_list.append(
                         str(date)
@@ -56,5 +57,6 @@ class ExcelDelays:
                         + length
                     )
 
-                db_processor.create_delays_record(date, start_time, end_time, shift_id, unit_part_id)
+                db_processor.create_delays_record(delay_type_id, date, start_time, end_time, shift_id, unit_part_id,
+                                                  board_id)
                 time.sleep(0.001)
