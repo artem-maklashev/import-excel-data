@@ -37,8 +37,7 @@ class ExcelDelays:
                 unit_part = row.unit_part if pd.notna(row.unit_part) else " "
 
                 board_id = db_processor.get_gypsum_board_id(
-                    trade_mark, btype, edge, thickness, length, width
-                )
+                    trade_mark, btype, edge, thickness, length, width)
                 shift_id = db_processor.get_shift_id(shift)
                 unit_part_id = db_processor.get_unit_part_id(division, production_area, unit, unit_part)
                 delay_type_id = db_processor.get_daley_type_id(delay_type)

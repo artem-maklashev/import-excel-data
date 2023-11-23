@@ -15,7 +15,7 @@ def main():
     db_process.clearDB()
     df = db_process.get_gypsum_board()
     print(df.head())
-    path: str = r"D:\YandexDisk\Обучение Python\ДИПЛОМ\Начальные данные\выпуск.xlsx"
+    path: str = r"F:\YandexDisk-ar.maclashev\Обучение Python\ДИПЛОМ\Начальные данные\выпуск.xlsx"
     print(path)
     excel_processor = Excel(path)
     excel_data = excel_processor.df

@@ -15,6 +15,7 @@ class DBProcess:
         database="goldengroup",
         port=3306
     )
+
     def clearDB(self):
         cursor = self.connection.cursor()
         query = "DELETE FROM plan ;"
@@ -38,7 +39,6 @@ class DBProcess:
         cursor.execute(query)
         self.connection.commit()
         cursor.close()
-
 
     def get_connection(self):
         return DBProcess.connection_pool.get_connection()
@@ -136,17 +136,19 @@ class DBProcess:
 
     def get_gypsum_board_id(self, trade_mark, btype, edge, thickness, length, width):
         df = self.get_gypsum_board()
-        print(trade_mark, btype, edge, thickness, length, width)
+        if btype == 'А':
+            print("Попался")
         result_series = df.loc[
             (df["trade_mark"] == trade_mark) &
             (df["btype"] == btype) &
             (df["edge"] == edge) &
             (df["thickness"] == thickness) &
             (df["length"] == length) &
-            (df["width"] == width),"id"]
+            (df["width"] == width), "id"]
 
         if result_series.empty:
             del df
+            print(trade_mark, btype, edge, thickness, length, width)
             return "Not found"
         id_value = int(result_series.iloc[0])
         del df
@@ -187,14 +189,12 @@ class DBProcess:
 
     def get_unit_part_id(self, division, production_area, unit, unit_part):
         df = self.get_delays()
-        print(df.loc[df["id"] == 55])
-        print(division, production_area, unit, unit_part)
+
         if unit_part == " ":
             condition = (
                     (df["division"] == division) &
                     (df["production_area"] == production_area) &
-                    (df["unit"] == unit) &
-                    (df["unit_part"] == "-")
+                    (df["unit"] == unit)
             )
         else:
             condition = (
@@ -203,16 +203,21 @@ class DBProcess:
                     (df["unit"] == unit) &
                     (df["unit_part"] == unit_part)
             )
+        # print('division', sum(df["division"] == division))
+        # print("production_area", sum(df["production_area"] == production_area))
+        # print("unit", sum(df["unit"] == unit))
+        # print("unit_part", sum(df["unit_part"] == "-"))
 
         result_series = df.loc[condition, "id"]
 
         if result_series.empty:
             del df
+            print(division, production_area, unit, unit_part)
             return "Not found"
 
         id_value = int(result_series.iloc[0])
         del df
-        print(id_value)
+        # print(id_value)
         return id_value
 
     def get_delays(self):
