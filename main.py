@@ -1,5 +1,8 @@
+import threading
+
 import mysql.connector
 
+import import_dalays
 from db_process import DBProcess
 from excel_process import Excel
 
@@ -12,10 +15,10 @@ def main():
         database="goldengroup",
         port=3306)
     db_process = DBProcess(connection)
-    db_process.clearDB()
     df = db_process.get_gypsum_board()
     print(df.head())
-    path: str = r"F:\YandexDisk-ar.maclashev\Обучение Python\ДИПЛОМ\Начальные данные\выпуск.xlsx"
+    path: str = r"D:\YandexDisk\Обучение Python\ДИПЛОМ\Начальные данные\выпуск.xlsx"
+    db_process.clearDB()
     print(path)
     excel_processor = Excel(path)
     excel_data = excel_processor.df
@@ -30,5 +33,10 @@ def main():
             print(errors_list[i])
 
 
-if __name__ == "__main__":
-    main()
+thread1 = threading.Thread(main())
+thread2 = threading.Thread(import_dalays.main())
+
+thread1.start()
+thread2.start()
+# if __name__ == "__main__":
+#     main()

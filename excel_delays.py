@@ -16,7 +16,7 @@ class ExcelDelays:
         with db_processor.get_connection() as connection:
             df = self.df
 
-            for row in tqdm(df.itertuples(), total=df.shape[0], desc="Обработка"):
+            for row in tqdm(df.itertuples(), total=df.shape[0], desc="Обработка", colour="green"):
                 delay_type = row.delay_type
                 shift = row.shift
                 trade_mark = row.board_trade_mark

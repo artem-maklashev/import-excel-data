@@ -27,6 +27,9 @@ class DBProcess:
         query = "DELETE FROM productionlog ;"
         # Выполнение SQL-запросов
         cursor.execute(query)
+        query = "DELETE FROM delays ;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
 
         query = "ALTER TABLE plan AUTO_INCREMENT=1;"
         # Выполнение SQL-запросов
@@ -35,6 +38,10 @@ class DBProcess:
         # Выполнение SQL-запросов
         cursor.execute(query)
         query = "ALTER TABLE productionlog AUTO_INCREMENT=1;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+
+        query = "ALTER TABLE delays AUTO_INCREMENT=1;"
         # Выполнение SQL-запросов
         cursor.execute(query)
         self.connection.commit()
@@ -240,7 +247,7 @@ class DBProcess:
         try:
             with self.get_connection() as connection:
                 cursor = connection.cursor()
-                query = ("INSERT INTO dalays (daley_type_id, dalay_date, start_time, end_time, unit_part_id, shift_id,"
+                query = ("INSERT INTO delays (delay_type_id, delay_date, start_time, end_time, unit_part_id, shift_id,"
                          " gypsum_board_id) "
                          "VALUES (%s, %s, %s, %s, %s, %s, %s);")
                 cursor.execute(query, (daley_type_id, date, start_time, end_time, unit_part_id, shift_id,
@@ -264,3 +271,61 @@ class DBProcess:
                 return result[0]
             else:
                 return None
+
+    def get_defect_types_id(self, defect_types):
+        with self.get_connection() as connection:
+            query = "SELECT id FROM defect_types WHERE name = %s"
+            cursor = connection.cursor()
+            cursor.execute(query, defect_types)
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                return None
+
+    def get_defect_reason_id(self, defect_reason):
+        with self.get_connection() as connection:
+            query = "SELECT id FROM defect_reason WHERE name = %s"
+            cursor = connection.cursor()
+            cursor.execute(query, defect_reason)
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                return None
+
+    def get_defect_id(self, defect_types_id, defect_reason_id, defect_name):
+        with self.get_connection() as connection:
+            query = "SELECT id FROM defects WHERE name = %s  AND defect_types_id = %s and defect_reason_id = %s"
+            cursor = connection.cursor()
+            cursor.execute(query, defect_name, defect_types_id, defect_reason_id)
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                return None
+
+    def get_production_log_id(self, defect_date, shift_id):
+        with self.get_connection() as connection:
+            query = "SELECT id FROM productionlog WHERE production_date = %s AND shift_id = %s"
+            cursor = connection.cursor()
+            cursor.execute(query, defect_date, shift_id)
+            result = cursor.fetchone()
+            if result:
+                return result
+            else:
+                return None
+
+    def get_board_production_id(self, production_log_id, gypsum_board_id):
+        with self.get_connection() as connection:
+            query = ("SELECT id FROM board_production WHERE production_log_id IN %s AND gboard_category_id = 1 "
+                     "AND gypsum_board_id = %s")
+            cursor = connection.cursor()
+            cursor.execute(query, production_log_id, gypsum_board_id)
+            result = cursor.fetchone()
+            if result:
+                return result
+            else:
+                return None
+    
+    
