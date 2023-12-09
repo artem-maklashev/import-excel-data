@@ -16,6 +16,37 @@ class DBProcess:
         port=33006
     )
 
+    def clearDB(self):
+        cursor = self.connection.cursor()
+        query = "DELETE FROM plan ;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        query = "DELETE FROM board_production ;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        query = "DELETE FROM productionlog ;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        query = "DELETE FROM delays ;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+
+        query = "ALTER TABLE plan AUTO_INCREMENT=1;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        query = "ALTER TABLE board_production AUTO_INCREMENT=1;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        query = "ALTER TABLE productionlog AUTO_INCREMENT=1;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+
+        query = "ALTER TABLE delays AUTO_INCREMENT=1;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+        self.connection.commit()
+        cursor.close()
+
     def get_connection(self):
         return DBProcess.connection_pool.get_connection()
 
@@ -37,7 +68,7 @@ class DBProcess:
         with self.get_connection():
             query = """SELECT gb.id, 
                         tm.name AS trade_mark, 
-                        bt.name AS 'type',
+                        bt.name AS 'btype',
                         e.name AS edge,
                         l.value AS 'length',
                         t.value AS thickness,
@@ -54,7 +85,6 @@ class DBProcess:
         return df
 
     def create_production_log_record(self, p_date, stop_time, work_time, shift, shift_tag):
-
         if shift_tag == 1:
             production_start = p_date + timedelta(hours=8)
         elif shift_tag == 2:
@@ -63,6 +93,7 @@ class DBProcess:
                             timedelta(minutes=(work_time - stop_time))
         production_start_str = production_start.strftime("%Y-%m-%d %H:%M:%S") if production_start else None
         production_finish_str = production_finish.strftime("%Y-%m-%d %H:%M:%S") if production_finish else None
+        p_date_str = (p_date + timedelta(hours=0)).strftime("%Y-%m-%d") if p_date else None
         shift_id = self.get_shift_id(shift)
         product_types_id = 1
         # print(production_start, production_finish, shift_id, product_types_id)
@@ -70,10 +101,13 @@ class DBProcess:
         try:
             with self.get_connection() as connection:
                 cursor = connection.cursor()
-                query = ("INSERT INTO productionlog (production_start, production_finish, shift_id, product_types_id) "
-                         "VALUES (%s, %s, %s, %s)")
+                query = ("INSERT INTO productionlog (production_start, production_finish, shift_id, product_types_id,"
+                         " production_date) "
+                         "VALUES (%s, %s, %s, %s, %s)")
+                # print("Попытка вставить данные:",production_start_str, production_finish_str,
+                # shift_id, product_types_id)
                 cursor.execute(
-                    query, (production_start_str, production_finish_str, shift_id, product_types_id))
+                    query, (production_start_str, production_finish_str, shift_id, product_types_id, p_date_str))
                 new_id = cursor.lastrowid
                 connection.commit()
                 production_log_id = new_id
@@ -107,22 +141,25 @@ class DBProcess:
             else:
                 return None
 
-    def get_gypsum_board_id(self, trade_mark, type, edge, thickness, length, width):
+    def get_gypsum_board_id(self, trade_mark, btype, edge, thickness, length, width):
         df = self.get_gypsum_board()
+        if btype == 'А':
+            print("Попался")
         result_series = df.loc[
             (df["trade_mark"] == trade_mark) &
-            (df["type"] == type) &
+            (df["btype"] == btype) &
             (df["edge"] == edge) &
             (df["thickness"] == thickness) &
             (df["length"] == length) &
-            (df["width"] == width),
-            "id"
-        ]
+            (df["width"] == width), "id"]
+
         if result_series.empty:
             del df
+            print(trade_mark, btype, edge, thickness, length, width)
             return "Not found"
         id_value = int(result_series.iloc[0])
         del df
+
         return id_value
 
     def insert_into_board_production(self, production_log_id, board_id, gboard_category, value):
@@ -156,3 +193,139 @@ class DBProcess:
             else:
                 e.msg = "Ошибка работы с БД"
                 raise e
+
+    def get_unit_part_id(self, division, production_area, unit, unit_part):
+        df = self.get_delays()
+
+        if unit_part == " ":
+            condition = (
+                    (df["division"] == division) &
+                    (df["production_area"] == production_area) &
+                    (df["unit"] == unit)
+            )
+        else:
+            condition = (
+                    (df["division"] == division) &
+                    (df["production_area"] == production_area) &
+                    (df["unit"] == unit) &
+                    (df["unit_part"] == unit_part)
+            )
+        # print('division', sum(df["division"] == division))
+        # print("production_area", sum(df["production_area"] == production_area))
+        # print("unit", sum(df["unit"] == unit))
+        # print("unit_part", sum(df["unit_part"] == "-"))
+
+        result_series = df.loc[condition, "id"]
+
+        if result_series.empty:
+            del df
+            print(division, production_area, unit, unit_part)
+            return "Not found"
+
+        id_value = int(result_series.iloc[0])
+        del df
+        # print(id_value)
+        return id_value
+
+    def get_delays(self):
+        with self.get_connection():
+            query = """SELECT 
+                        up.id, 
+                        d.id as division,
+                        pa.name AS production_area,
+                        u.name AS unit,
+                        up.name AS unit_part
+                    FROM unit_part up 
+                        JOIN unit u ON up.unit_id = u.id 
+                        JOIN production_area pa ON u.production_area_id = pa.id
+                        JOIN division d ON d.id = pa.division_id;"""
+            warnings.filterwarnings("ignore")
+            df = pd.read_sql(query, self.connection)
+        return df
+
+    def create_delays_record(self, daley_type_id, date, start_time, end_time, shift_id, unit_part_id, gypsum_board_id):
+        try:
+            with self.get_connection() as connection:
+                cursor = connection.cursor()
+                query = ("INSERT INTO delays (delay_type_id, delay_date, start_time, end_time, unit_part_id, shift_id,"
+                         " gypsum_board_id) "
+                         "VALUES (%s, %s, %s, %s, %s, %s, %s);")
+                cursor.execute(query, (daley_type_id, date, start_time, end_time, unit_part_id, shift_id,
+                                       gypsum_board_id))
+                connection.commit()
+        except IntegrityError as e:
+            if e.errno == 1062:
+                pass
+                # print("Duplicate plan entry")
+            else:
+                e.msg = "Ошибка работы с БД"
+                raise e
+
+    def get_daley_type_id(self, delay_type):
+        with self.get_connection() as connection:
+            query = "SELECT id FROM delay_type WHERE name = %s"
+            cursor = connection.cursor()
+            cursor.execute(query, (delay_type,))
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                return None
+
+    def get_defect_types_id(self, defect_types):
+        with self.get_connection() as connection:
+            query = "SELECT id FROM defect_types WHERE name = %s"
+            cursor = connection.cursor()
+            cursor.execute(query, defect_types)
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                return None
+
+    def get_defect_reason_id(self, defect_reason):
+        with self.get_connection() as connection:
+            query = "SELECT id FROM defect_reason WHERE name = %s"
+            cursor = connection.cursor()
+            cursor.execute(query, defect_reason)
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                return None
+
+    def get_defect_id(self, defect_types_id, defect_reason_id, defect_name):
+        with self.get_connection() as connection:
+            query = "SELECT id FROM defects WHERE name = %s  AND defect_types_id = %s and defect_reason_id = %s"
+            cursor = connection.cursor()
+            cursor.execute(query, defect_name, defect_types_id, defect_reason_id)
+            result = cursor.fetchone()
+            if result:
+                return result[0]
+            else:
+                return None
+
+    def get_production_log_id(self, defect_date, shift_id):
+        with self.get_connection() as connection:
+            query = "SELECT id FROM productionlog WHERE production_date = %s AND shift_id = %s"
+            cursor = connection.cursor()
+            cursor.execute(query, defect_date, shift_id)
+            result = cursor.fetchone()
+            if result:
+                return result
+            else:
+                return None
+
+    def get_board_production_id(self, production_log_id, gypsum_board_id):
+        with self.get_connection() as connection:
+            query = ("SELECT id FROM board_production WHERE production_log_id IN %s AND gboard_category_id = 1 "
+                     "AND gypsum_board_id = %s")
+            cursor = connection.cursor()
+            cursor.execute(query, production_log_id, gypsum_board_id)
+            result = cursor.fetchone()
+            if result:
+                return result
+            else:
+                return None
+    
+    
