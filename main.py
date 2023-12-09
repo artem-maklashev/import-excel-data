@@ -2,6 +2,7 @@ import threading
 
 import mysql.connector
 
+import config
 import import_dalays
 from db_process import DBProcess
 from excel_process import Excel
@@ -9,15 +10,15 @@ from excel_process import Excel
 
 def main():
     connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="402986",
-        database="goldengroup",
-        port=3306)
+        host=config.host,
+        user=config.user,
+        password=config.password,
+        database=config.database,
+        port=config.port)
     db_process = DBProcess(connection)
     df = db_process.get_gypsum_board()
     print(df.head())
-    path: str = r"D:\YandexDisk\Обучение Python\ДИПЛОМ\Начальные данные\выпуск.xlsx"
+    path: str = config.production
     db_process.clearDB()
     print(path)
     excel_processor = Excel(path)

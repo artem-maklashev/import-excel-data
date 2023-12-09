@@ -3,22 +3,25 @@ import pandas as pd
 from pandas import DataFrame
 from tqdm import tqdm
 
+import config
 from db_process import DBProcess
+
 
 class ImportDefects:
     errors_list = []
+
     def read_data(self):
-        path: str = r"D:\YandexDisk\Обучение Python\ДИПЛОМ\Начальные данные\простои.xlsx"
+        path: str = config.defects
         data: DataFrame = pd.read_excel(path)
         return data
 
     def import_defects_data(self, data):
         connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="402986",
-        database="goldengroup",
-        port=3306)
+            host=config.host,
+            user=config.user,
+            password=config.password,
+            database=config.database,
+            port=config.port)
         db_processor = DBProcess(connection)
         with db_processor.get_connection() as connection:
             df = data
@@ -26,7 +29,7 @@ class ImportDefects:
                 defect_date = row.date
                 defect_shift = row.shift
                 defect_trade_mark = row.trade_mark
-                defect_board_type =row.board_type
+                defect_board_type = row.board_type
                 defect_edge = row.edge
                 defect_length = row.length
                 defect_width = row.width
@@ -36,7 +39,7 @@ class ImportDefects:
                 defect_name = row.defect_name
                 defect_value = row.value
                 shift_id = db_processor.get_shift_id(defect_shift)
-                gypsum_board_id = db_processor.get_gypsum_board_id(defect_trade_mark,defect_board_type, defect_edge,
+                gypsum_board_id = db_processor.get_gypsum_board_id(defect_trade_mark, defect_board_type, defect_edge,
                                                                    defect_thickness, defect_length, defect_width)
                 defect_types_id = db_processor.get_defect_types_id(defect_types)
                 defect_reason_id = db_processor.get_defect_reason_id(defect_reason)

@@ -1,19 +1,19 @@
 import mysql.connector
 
+import config
 from db_process import DBProcess
 from excel_delays import ExcelDelays
 
 
 def main():
     connection = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="402986",
-        database="goldengroup",
-        port=3306)
+        host=config.host,
+        user=config.user,
+        password=config.password,
+        database=config.database,
+        port=config.port)
     db_process = DBProcess(connection)
-    path: str = (r"D:\YandexDisk\Обучение Python\ДИПЛОМ\Начальные данные\простои.xlsx"
-                 )
+    path: str = config.delays
     excel_processor = ExcelDelays(path)
     excel_processor.import_delays_data(db_process)
 
