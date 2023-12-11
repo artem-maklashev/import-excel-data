@@ -6,6 +6,7 @@ import config
 import import_dalays
 from db_process import DBProcess
 from excel_process import Excel
+from import_defects import ImportDefects
 
 
 def main():
@@ -23,8 +24,8 @@ def main():
     print(path)
     excel_processor = Excel(path)
     excel_data = excel_processor.df
-    select_production = (excel_data["plan"].isna()) & (excel_data["1/2"] > 0)
-    excel_production_data = excel_processor.import_production_data(select_production, db_process)
+    select_production = (excel_data["plan"].isna())
+    excel_processor.import_production_data(select_production, db_process)
     select_plan = (excel_data["plan"] > 0)
     excel_processor.import_production_data(select_plan, db_process)
     errors_list = excel_processor.errors_list
@@ -32,6 +33,8 @@ def main():
     if len(errors_list) != 0:
         for i in range(0, 10):
             print(errors_list[i])
+    defects = ImportDefects()
+    defects.import_defects_data()
 
 
 thread1 = threading.Thread(main())

@@ -4,19 +4,26 @@ from mysql.connector import pooling, IntegrityError
 
 import pandas as pd
 
+import config
+
 
 class DBProcess:
     connection_pool = pooling.MySQLConnectionPool(
         pool_name="my_pool",
         pool_size=5,
-        host="localhost",
-        user="root",
-        password="402986",
-        database="goldengroup",
-        port=33006
+        host=config.host,
+        user=config.user,
+        password=config.password,
+        database=config.database,
+        port=config.port
     )
 
     def clearDB(self):
+        cursor = self.connection.cursor()
+        query = "DELETE FROM board_defects_log ;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+
         cursor = self.connection.cursor()
         query = "DELETE FROM plan ;"
         # Выполнение SQL-запросов
@@ -31,6 +38,7 @@ class DBProcess:
         # Выполнение SQL-запросов
         cursor.execute(query)
 
+
         query = "ALTER TABLE plan AUTO_INCREMENT=1;"
         # Выполнение SQL-запросов
         cursor.execute(query)
@@ -42,6 +50,10 @@ class DBProcess:
         cursor.execute(query)
 
         query = "ALTER TABLE delays AUTO_INCREMENT=1;"
+        # Выполнение SQL-запросов
+        cursor.execute(query)
+
+        query = "ALTER TABLE board_defects_log AUTO_INCREMENT=1;"
         # Выполнение SQL-запросов
         cursor.execute(query)
         self.connection.commit()
@@ -82,6 +94,7 @@ class DBProcess:
                         JOIN `length` l ON gb.length_id = l.id;"""
             warnings.filterwarnings("ignore")
             df = pd.read_sql(query, self.connection)
+            # print(df.dtypes)
         return df
 
     def create_production_log_record(self, p_date, stop_time, work_time, shift, shift_tag):
@@ -89,10 +102,15 @@ class DBProcess:
             production_start = p_date + timedelta(hours=8)
         elif shift_tag == 2:
             production_start = p_date + timedelta(hours=20)
+        else:
+            production_start = p_date + timedelta(hours=8)
         production_finish = production_start + \
                             timedelta(minutes=(work_time - stop_time))
         production_start_str = production_start.strftime("%Y-%m-%d %H:%M:%S") if production_start else None
         production_finish_str = production_finish.strftime("%Y-%m-%d %H:%M:%S") if production_finish else None
+        # if p_date.month == 1:
+        #     print(production_start_str, production_finish_str)
+
         p_date_str = (p_date + timedelta(hours=0)).strftime("%Y-%m-%d") if p_date else None
         shift_id = self.get_shift_id(shift)
         product_types_id = 1
@@ -131,6 +149,8 @@ class DBProcess:
         return production_log_id
 
     def get_shift_id(self, shift):
+        if shift == 'nan':
+            return 5
         with self.get_connection() as connection:
             query = "SELECT id FROM shift WHERE name = %s"
             cursor = connection.cursor()
@@ -155,7 +175,7 @@ class DBProcess:
 
         if result_series.empty:
             del df
-            print(trade_mark, btype, edge, thickness, length, width)
+            print(trade_mark, btype, edge, thickness, width, length)
             return "Not found"
         id_value = int(result_series.iloc[0])
         del df
@@ -276,7 +296,7 @@ class DBProcess:
         with self.get_connection() as connection:
             query = "SELECT id FROM defect_types WHERE name = %s"
             cursor = connection.cursor()
-            cursor.execute(query, defect_types)
+            cursor.execute(query, (defect_types,))
             result = cursor.fetchone()
             if result:
                 return result[0]
@@ -287,7 +307,7 @@ class DBProcess:
         with self.get_connection() as connection:
             query = "SELECT id FROM defect_reason WHERE name = %s"
             cursor = connection.cursor()
-            cursor.execute(query, defect_reason)
+            cursor.execute(query, (defect_reason,))
             result = cursor.fetchone()
             if result:
                 return result[0]
@@ -298,34 +318,75 @@ class DBProcess:
         with self.get_connection() as connection:
             query = "SELECT id FROM defects WHERE name = %s  AND defect_types_id = %s and defect_reason_id = %s"
             cursor = connection.cursor()
-            cursor.execute(query, defect_name, defect_types_id, defect_reason_id)
+            values = (defect_name, defect_types_id, defect_reason_id)
+            cursor.execute(query, values)
             result = cursor.fetchone()
             if result:
                 return result[0]
             else:
+                print(defect_types_id, defect_reason_id, defect_name)
                 return None
 
     def get_production_log_id(self, defect_date, shift_id):
         with self.get_connection() as connection:
             query = "SELECT id FROM productionlog WHERE production_date = %s AND shift_id = %s"
             cursor = connection.cursor()
-            cursor.execute(query, defect_date, shift_id)
-            result = cursor.fetchone()
-            if result:
-                return result
-            else:
-                return None
+            values = (defect_date, shift_id)
+            cursor.execute(query, values)
+            production_log_ids = []
+            while True:
+                result = cursor.fetchone()
+                if not result:
+                    break
+                production_log_ids.append(result[0])
+            if len(production_log_ids) == 0:
+                print("Not found production_log_id. Date ", defect_date, " shift ", shift_id)
+            return production_log_ids
 
-    def get_board_production_id(self, production_log_id, gypsum_board_id):
+    def get_board_production_id(self, production_log_ids: list, gypsum_board_id):
+        # production_log_ids_str = ",".join(map(str, production_log_ids))
+        # print(production_log_ids)
         with self.get_connection() as connection:
-            query = ("SELECT id FROM board_production WHERE production_log_id IN %s AND gboard_category_id = 1 "
-                     "AND gypsum_board_id = %s")
+            # query = ("SELECT DISTINCT production_log_id FROM board_production "
+            #          "WHERE production_log_id IN (%s) "
+            #          "AND gypsum_board_id = %s")
+            # cursor = connection.cursor()
+            # values = (production_log_ids_str, gypsum_board_id)
+            # cursor.execute(query, values)
+            # result = cursor.fetchone()
+            # if result:
+            #     return result[0]
+            # else:
+            #     print("Не нашел production_log_id", values)
+            #     return None
+            for ids in production_log_ids:
+                query = ("SELECT DISTINCT production_log_id FROM board_production "
+                         "WHERE production_log_id = %s "                     
+                         "AND gypsum_board_id = %s")
+                cursor = connection.cursor()
+                values = (ids, gypsum_board_id)
+                cursor.execute(query, values)
+                result = cursor.fetchone()
+                if result:
+                    return result[0]
+            print("Не нашел ", production_log_ids, " гипсокартон ", gypsum_board_id)
+        return None
+
+    def create_board_defects_record(self, board_production_id, defect_value, defect_id):
+        with self.get_connection() as connection:
+            query = ("SELECT id FROM board_defects_log WHERE production_log_id = %s AND value = %s "
+                     "AND defects_id = %s ")
             cursor = connection.cursor()
-            cursor.execute(query, production_log_id, gypsum_board_id)
+            values = (board_production_id, defect_value, defect_id)
+            cursor.execute(query, values)
             result = cursor.fetchone()
+            cursor.close()
             if result:
-                return result
+                return
             else:
-                return None
-    
-    
+                cursor = connection.cursor()
+                query = ("INSERT INTO board_defects_log (production_log_id, value, defects_id) "
+                         "VALUES (%s, %s, %s);")
+                cursor.execute(query, (board_production_id, defect_value, defect_id))
+                cursor.close()
+                connection.commit()

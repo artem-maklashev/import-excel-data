@@ -15,6 +15,7 @@ class Excel:
     def import_production_data(self, condition, db_processor: DBProcess):
         with db_processor.get_connection() as connection:
             df = self.df.loc[condition]
+            # print(df.dtypes)
             df = df.rename(columns={"1/2": "am_pm"})
             for row in tqdm(df.itertuples(), total = df.shape[0], desc="Обработка"):
                 plan_value = row.plan
@@ -75,7 +76,10 @@ class Excel:
                 if plan_value > 0:
                     db_processor.create_plan_record(date, board_id, plan_value)
                 else:
-                    production_log_id = db_processor.create_production_log_record(date, stop_time, work_time, shift, shift_tag)
+                    if pd.isna(shift):
+                        shift = 'Все'
+                    production_log_id = db_processor.create_production_log_record(date, stop_time, work_time, shift,
+                                                                                  shift_tag)
 
                     for data, category_id in data_to_insert:
                         if pd.notna(data):
