@@ -1,12 +1,15 @@
 import threading
+import time
 
 import mysql.connector
+import win32com
 
 import config
 import import_dalays
 from db_process import DBProcess
 from excel_process import Excel
 from import_defects import ImportDefects
+from win32com import client
 
 
 def main():
@@ -37,10 +40,25 @@ def main():
     defects.import_defects_data()
 
 
+xl_apps = [config.production, config.delays, config.defects]
+xl_app = win32com.client.DispatchEx("Excel.Application")
+for book in xl_apps:
+    wb = xl_app.Workbooks.Open(book)
+    wb.RefreshAll()
+    print("обновляем книгу", book)
+    xl_app.CalculateUntilAsyncQueriesDone()
+    # time.sleep(10)
+    wb.Save()
+    wb.Close(SaveChanges=True)
+xl_app.Quit()
+
 thread1 = threading.Thread(main())
 thread2 = threading.Thread(import_dalays.main())
 
 thread1.start()
 thread2.start()
+
+thread1.join()
+thread2.join()
 # if __name__ == "__main__":
 #     main()

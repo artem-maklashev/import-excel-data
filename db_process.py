@@ -38,7 +38,6 @@ class DBProcess:
         # Выполнение SQL-запросов
         cursor.execute(query)
 
-
         query = "ALTER TABLE plan AUTO_INCREMENT=1;"
         # Выполнение SQL-запросов
         cursor.execute(query)

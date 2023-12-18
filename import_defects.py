@@ -27,7 +27,7 @@ class ImportDefects:
         db_processor = DBProcess(connection)
         with db_processor.get_connection() as connection:
             df = self.data
-            for row in tqdm(df.itertuples(), total=df.shape[0], desc="Обработка", colour="green"):
+            for row in tqdm(df.itertuples(), total=df.shape[0], desc="Обработка таблицы брака", colour="green"):
                 defect_date = row.date
                 defect_shift = row.shift
                 defect_trade_mark = row.trade_mark

@@ -17,7 +17,7 @@ class Excel:
             df = self.df.loc[condition]
             # print(df.dtypes)
             df = df.rename(columns={"1/2": "am_pm"})
-            for row in tqdm(df.itertuples(), total = df.shape[0], desc="Обработка"):
+            for row in tqdm(df.itertuples(), total = df.shape[0], desc="Обработка таблицы выпуск"):
                 plan_value = row.plan
                 date = row.p_date
                 shift_tag = row.am_pm
