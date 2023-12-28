@@ -65,3 +65,5 @@ class ImportDefects:
 
                 db_processor.create_board_defects_record(board_production_id, defect_value, defect_id)
                 time.sleep(0.001)
+            for item in self.errors_list:
+                print(item)

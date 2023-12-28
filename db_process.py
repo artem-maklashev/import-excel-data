@@ -97,9 +97,9 @@ class DBProcess:
         return df
 
     def create_production_log_record(self, p_date, stop_time, work_time, shift, shift_tag):
-        if shift_tag == 1:
-            production_start = p_date + timedelta(hours=8)
-        elif shift_tag == 2:
+        # if shift_tag == 1:
+        #     production_start = p_date + timedelta(hours=8)
+        if shift_tag == 2:
             production_start = p_date + timedelta(hours=20)
         else:
             production_start = p_date + timedelta(hours=8)
@@ -182,21 +182,31 @@ class DBProcess:
         return id_value
 
     def insert_into_board_production(self, production_log_id, board_id, gboard_category, value):
-        try:
-            with self.get_connection() as connection:
+        with self.get_connection() as connection:
+            try:
                 cursor = connection.cursor()
                 query = ("INSERT INTO board_production (production_log_id, gypsum_board_id, gboard_category_id, "
                          "value) VALUES (%s, %s, %s, %s)")
-                cursor.execute(
-                    query, (production_log_id, board_id, gboard_category, value))
+                cursor.execute(query, (production_log_id, board_id, gboard_category, value))
                 connection.commit()
-        except IntegrityError as e:
-            if e.errno == 1062:
-                pass
-                # print("Duplicate entry")
-            else:
-                e.msg = "Ошибка работы с БД"
-                raise e
+            except IntegrityError as e:
+                if e.errno == 1062:
+                    try:
+                        cursor = connection.cursor()
+                        query = ("UPDATE board_production SET value = value + %s WHERE production_log_id = %s AND "
+                                 "gypsum_board_id = %s AND gboard_category_id = %s ;")
+                        cursor.execute(query, (value, production_log_id, board_id, gboard_category))
+                        connection.commit()
+                    except Exception as update_error:
+                        connection.rollback()
+                        # Handle the update error, log or re-raise as needed
+                        print(f"Update error: {update_error}")
+                else:
+                    connection.rollback()
+                    e.msg = "Ошибка работы с БД"
+                    raise e
+            finally:
+                cursor.close()
 
     def create_plan_record(self, plan_date, gypsum_board_id, value):
         try:
@@ -360,7 +370,7 @@ class DBProcess:
             #     return None
             for ids in production_log_ids:
                 query = ("SELECT DISTINCT production_log_id FROM board_production "
-                         "WHERE production_log_id = %s "                     
+                         "WHERE production_log_id = %s "
                          "AND gypsum_board_id = %s")
                 cursor = connection.cursor()
                 values = (ids, gypsum_board_id)
