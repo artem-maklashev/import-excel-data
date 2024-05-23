@@ -381,12 +381,12 @@ class DBProcess:
             print("Не нашел ", production_log_ids, " гипсокартон ", gypsum_board_id)
         return None
 
-    def create_board_defects_record(self, board_production_id, defect_value, defect_id):
+    def create_board_defects_record(self, production_log_id, defect_value, defect_id):
         with self.get_connection() as connection:
             query = ("SELECT id FROM board_defects_log WHERE production_log_id = %s AND value = %s "
                      "AND defects_id = %s ")
             cursor = connection.cursor()
-            values = (board_production_id, defect_value, defect_id)
+            values = (production_log_id, defect_value, defect_id)
             cursor.execute(query, values)
             result = cursor.fetchone()
             cursor.close()
@@ -396,6 +396,6 @@ class DBProcess:
                 cursor = connection.cursor()
                 query = ("INSERT INTO board_defects_log (production_log_id, value, defects_id) "
                          "VALUES (%s, %s, %s);")
-                cursor.execute(query, (board_production_id, defect_value, defect_id))
+                cursor.execute(query, (production_log_id, defect_value, defect_id))
                 cursor.close()
                 connection.commit()

@@ -13,11 +13,12 @@ class Excel:
         self.errors_list = []
 
     def import_production_data(self, condition, db_processor: DBProcess):
+
         with db_processor.get_connection() as connection:
             df = self.df.loc[condition]
-            # print(df.dtypes)
             df = df.rename(columns={"1/2": "am_pm"})
-            for row in tqdm(df.itertuples(), total = df.shape[0], desc="Обработка таблицы выпуск"):
+
+            for row in tqdm(df.iloc[::-1].itertuples(), total=df.shape[0], desc="Обработка таблицы выпуск"):
                 plan_value = row.plan
                 date = row.p_date
                 shift_tag = row.am_pm
@@ -49,17 +50,7 @@ class Excel:
                 )
                 if board_id == "Not found":
                     self.errors_list.append(
-                        str(date)
-                        + " "
-                        + trade_mark
-                        + " "
-                        + btype
-                        + " "
-                        + edge
-                        + " "
-                        + thickness
-                        + " "
-                        + length
+                        f"{date} {trade_mark} {btype} {edge} {thickness} {length}"
                     )
                 data_to_insert = [
                     (total, 1),
@@ -78,11 +69,11 @@ class Excel:
                 else:
                     if pd.isna(shift):
                         shift = 'Все'
-                    production_log_id = db_processor.create_production_log_record(date, stop_time, work_time, shift,
-                                                                                  shift_tag)
+                    production_log_id = db_processor.create_production_log_record(date, stop_time, work_time, shift, shift_tag)
 
                     for data, category_id in data_to_insert:
                         if pd.notna(data):
                             db_processor.insert_into_board_production(production_log_id, board_id, category_id, data)
                 time.sleep(0.001)
+
 
