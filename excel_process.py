@@ -1,8 +1,10 @@
 import time
 
 import pandas as pd
+import pytz
 from tqdm import tqdm_notebook, tqdm
 
+import config
 from db_process import DBProcess
 
 
@@ -11,6 +13,7 @@ class Excel:
     def __init__(self, path: str):
         self.df = pd.read_excel(path)
         self.errors_list = []
+        self.local_tz=pytz.timezone(config.timezone)
 
     def import_production_data(self, condition, db_processor: DBProcess):
 

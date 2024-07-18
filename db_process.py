@@ -111,8 +111,8 @@ class DBProcess:
         # production_start_str = production_start.strftime("%Y-%m-%d %H:%M:%S %Z%z") if production_start else None
         # production_finish_str = production_finish.strftime("%Y-%m-%d %H:%M:%S %Z%z") if production_finish else None
         # Добавление временной зоны к production_start и production_finish
-        production_start_with_tz = self.local_tz.localize(production_start)
-        production_finish_with_tz = self.local_tz.localize(production_finish)
+        production_start_with_tz = self.local_tz.localize(production_start).astimezone(pytz.utc)
+        production_finish_with_tz = self.local_tz.localize(production_finish).astimezone(pytz.utc)
 
         # Форматирование времени для записи в базу данных
         production_start_str = production_start_with_tz.strftime("%Y-%m-%d %H:%M:%S") if production_start else None
