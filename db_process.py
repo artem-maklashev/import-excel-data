@@ -1,13 +1,16 @@
 from datetime import timedelta
 import warnings
 from mysql.connector import pooling, IntegrityError
-
+import pytz
 import pandas as pd
 
 import config
 
 
 class DBProcess:
+
+    local_tz=pytz.timezone(config.timezone)
+
     connection_pool = pooling.MySQLConnectionPool(
         pool_name="my_pool",
         pool_size=5,
@@ -105,8 +108,16 @@ class DBProcess:
             production_start = p_date + timedelta(hours=8)
         production_finish = production_start + \
                             timedelta(minutes=(work_time - stop_time))
-        production_start_str = production_start.strftime("%Y-%m-%d %H:%M:%S") if production_start else None
-        production_finish_str = production_finish.strftime("%Y-%m-%d %H:%M:%S") if production_finish else None
+        # production_start_str = production_start.strftime("%Y-%m-%d %H:%M:%S %Z%z") if production_start else None
+        # production_finish_str = production_finish.strftime("%Y-%m-%d %H:%M:%S %Z%z") if production_finish else None
+        # Добавление временной зоны к production_start и production_finish
+        production_start_with_tz = self.local_tz.localize(production_start)
+        production_finish_with_tz = self.local_tz.localize(production_finish)
+
+        # Форматирование времени для записи в базу данных
+        production_start_str = production_start_with_tz.strftime("%Y-%m-%d %H:%M:%S") if production_start else None
+        production_finish_str = production_finish_with_tz.strftime("%Y-%m-%d %H:%M:%S") if production_finish else None
+
         # if p_date.month == 1:
         #     print(production_start_str, production_finish_str)
 

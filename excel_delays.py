@@ -1,13 +1,15 @@
 import time
 
 import pandas as pd
+import pytz
 from tqdm import tqdm_notebook, tqdm
 
+import config
 from db_process import DBProcess
 
 
 class ExcelDelays:
-
+    local_tz = pytz.timezone(config.timezone)
     def __init__(self, path: str):
         self.df = pd.read_excel(path)
         self.errors_list = []
@@ -29,8 +31,20 @@ class ExcelDelays:
                 else:
                     width = "1200"
                 date = row.delay_date
-                start_time = row.start_time if pd.notna(row.start_time) else 0
-                end_time = row.end_time if pd.notna(row.end_time) else 0
+                # Установите часовой пояс для start_time и end_time
+                if pd.notna(row.start_time):
+                    start_time = self.local_tz.localize(row.start_time).astimezone(pytz.utc)
+                    start_time_str = start_time.strftime("%Y-%m-%d %H:%M:%S %Z%z")
+                else:
+                    start_time_str = "0"
+
+                if pd.notna(row.end_time):
+                    end_time = self.local_tz.localize(row.end_time).astimezone(pytz.utc)
+                    end_time_str = end_time.strftime("%Y-%m-%d %H:%M:%S %Z%z")
+                else:
+                    end_time_str = "0"
+                # start_time = row.start_time.strftime("%Y-%m-%d %H:%M:%S %Z%z") if pd.notna(row.start_time) else 0
+                # end_time = row.end_time.strftime("%Y-%m-%d %H:%M:%S %Z%z") if pd.notna(row.end_time) else 0
                 division = 1
                 production_area = row.production_area
                 unit = row.unit
