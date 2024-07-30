@@ -58,7 +58,7 @@ thread2 = threading.Thread(import_dalays.main())
 thread1.start()
 thread2.start()
 
-thread1.join()
+# thread1.join()
 # thread2.join()
 # if __name__ == "__main__":
 #     main()
