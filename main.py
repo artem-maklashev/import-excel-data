@@ -8,6 +8,7 @@ import config
 import import_dalays
 from db_process import DBProcess
 from excel_process import Excel
+from import_consumptions import ImportConsumption
 from import_defects import ImportDefects
 from win32com import client
 
@@ -38,9 +39,12 @@ def main():
             print(errors_list[i])
     defects = ImportDefects()
     defects.import_defects_data()
+    # import_consumptions = ImportConsumption()
+    # import_consumptions.initialize_database()
+    # import_consumptions.get_board_productions()
 
 
-xl_apps = [config.production, config.delays, config.defects]
+xl_apps = [config.production, config.delays, config.defects, config.consumptions]
 xl_app = win32com.client.DispatchEx("Excel.Application")
 for book in xl_apps:
     wb = xl_app.Workbooks.Open(book)

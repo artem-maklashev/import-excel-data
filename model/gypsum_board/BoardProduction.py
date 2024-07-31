@@ -36,3 +36,6 @@ class BoardProduction(Base):
         gboard_category_title = self.gboard_category.title if self.gboard_category else 'None'
         return (f"id={self.id}, production_log_id='{production_log_id}', "
                 f"gypsum_board='{gypsum_board_id}', '{gboard_category_title}', value={self.value}")
+
+
+

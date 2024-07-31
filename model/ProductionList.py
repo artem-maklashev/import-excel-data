@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, DATETIME, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, DATETIME, DateTime, ForeignKey, BIGINT
 from sqlalchemy.orm import relationship
 from model.Shift import Shift
 from model.database import Base
@@ -9,7 +9,7 @@ from model.gypsum_board.ProductTypes import ProductTypes
 
 class ProductionList(Base):
     __tablename__ = "productionlog"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(BIGINT, primary_key=True, autoincrement=True)
     production_start = Column(DateTime, default=datetime.now())
     production_finish = Column(DateTime, default=datetime.now())
     shift_id = Column(Integer, ForeignKey("shift.id"))
@@ -27,3 +27,10 @@ class ProductionList(Base):
         self.shift = shift
         self.product_types = product_types
         self.production_date = production_date
+
+    def __repr__(self):
+        return (f"\n{self.id}"
+                f"\n{self.production_start}"
+                f"\n{self.production_finish}"
+                f"\n{self.production_date}"
+                f"\n{self.shift}\n")

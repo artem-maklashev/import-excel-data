@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.dialects.mysql import BIGINT
 
 from model.database import Base
 
@@ -6,7 +7,7 @@ from model.database import Base
 class TradeMark(Base):
     __tablename__ = "trade_mark"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(BIGINT, primary_key=True, autoincrement=True)
     name = Column(String(255))
     description = Column(String(255))
 
