@@ -46,7 +46,7 @@ class ImportConsumption:
                 joinedload(BoardProduction.production_log),
                 joinedload(BoardProduction.gypsum_board),
                 joinedload(BoardProduction.gboard_category)
-            ).all()
+            ).filter_by(gboard_category_id=1).all()
             for obj in objects[-10:]:
                 print(obj)
             excel_consumption: pd.DataFrame = read_consumption()
